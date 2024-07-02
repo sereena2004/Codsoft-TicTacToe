@@ -1,0 +1,218 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void printBoard(const vector<vector<char>>& board) {
+    cout << "  0   1   2\n";
+    for (int i = 0; i < 3; ++i) {
+        cout << i;
+        for (int j = 0; j < 3; ++j) {
+            cout << " " << board[i][j];
+            if (j < 2) cout << " |";
+        }
+        cout << "\n";
+        if (i < 2) cout << " ---+---+---\n";
+    }
+}
+
+bool checkWin(const vector<vector<char>>& board, char player) {
+    // Check rows and columns
+    for (int i = 0; i < 3; ++i) {
+        if (board[i][0] == player && board[i][1] == player && board[i][2] == player) return true;
+        if (board[0][i] == player && board[1][i] == player && board[2][i] == player) return true;
+    }
+    // Check diagonals
+    if (board[0][0] == player && board[1][1] == player && board[2][2] == player) return true;
+    if (board[0][2] == player && board[1][1] == player && board[2][0] == player) return true;
+    return false;
+}
+
+bool checkDraw(const vector<vector<char>>& board) {
+    for (const auto& row : board) {
+        for (const auto& cell : row) {
+            if (cell == ' ') return false;
+        }
+    }
+    return true;
+}
+
+void playerMove(vector<vector<char>>& board, char player) {
+    int row, col;
+    while (true) {
+        cout << "Player " << player << ", enter your move (row and column): ";
+        cin >> row >> col;
+        if (row >= 0 && row < 3 && col >= 0 && col < 3 && board[row][col] == ' ') {
+            board[row][col] = player;
+            break;
+        } else {
+            cout << "This move is not valid" << endl;
+        }
+    }
+}
+
+void playGame() {
+    vector<vector<char>> board(3, vector<char>(3, ' '));
+    char currentPlayer = 'X';
+    while (true) {
+        printBoard(board);
+        playerMove(board, currentPlayer);
+        if (checkWin(board, currentPlayer)) {
+            printBoard(board);
+            cout << "Player " << currentPlayer << " wins!" << endl;
+            break;
+        }
+        if (checkDraw(board)) {
+            printBoard(board);
+            cout << "The game is a draw!" << endl;
+            break;
+        }
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+}
+
+int main() {
+    char playAgain;
+    do {
+        playGame();
+        cout << "Do you want to play again? (y/n): ";
+        cin >> playAgain;
+    } while (playAgain == 'y');
+    return 0;
+}
+
+
+
+Output:
+/tmp/iePQBzO8X5.o
+  0   1   2
+0   |   |  
+ ---+---+---
+1   |   |  
+ ---+---+---
+2   |   |  
+Player X, enter your move (row and column): 0
+0
+  0   1   2
+0 X |   |  
+ ---+---+---
+1   |   |  
+ ---+---+---
+2   |   |  
+Player O, enter your move (row and column): 1
+1
+  0   1   2
+0 X |   |  
+ ---+---+---
+1   | O |  
+ ---+---+---
+2   |   |  
+Player X, enter your move (row and column): 1
+0
+  0   1   2
+0 X |   |  
+ ---+---+---
+1 X | O |  
+ ---+---+---
+2   |   |  
+Player O, enter your move (row and column): 0
+1
+  0   1   2
+0 X | O |  
+ ---+---+---
+1 X | O |  
+ ---+---+---
+2   |   |  
+Player X, enter your move (row and column): 2
+0
+  0   1   2
+0 X | O |  
+ ---+---+---
+1 X | O |  
+ ---+---+---
+2 X |   |  
+Player X wins!
+Do you want to play again? (y/n): y
+  0   1   2
+0   |   |  
+ ---+---+---
+1   |   |  
+ ---+---+---
+2   |   |  
+Player X, enter your move (row and column): 1
+1
+  0   1   2
+0   |   |  
+ ---+---+---
+1   | X |  
+ ---+---+---
+2   |   |  
+Player O, enter your move (row and column): 2
+0
+  0   1   2
+0   |   |  
+ ---+---+---
+1   | X |  
+ ---+---+---
+2 O |   |  
+Player X, enter your move (row and column): 2
+1
+  0   1   2
+0   |   |  
+ ---+---+---
+1   | X |  
+ ---+---+---
+2 O | X |  
+Player O, enter your move (row and column): 0
+1
+  0   1   2
+0   | O |  
+ ---+---+---
+1   | X |  
+ ---+---+---
+2 O | X |  
+Player X, enter your move (row and column): 1
+0
+  0   1   2
+0   | O |  
+ ---+---+---
+1 X | X |  
+ ---+---+---
+2 O | X |  
+Player O, enter your move (row and column): 1
+2
+  0   1   2
+0   | O |  
+ ---+---+---
+1 X | X | O
+ ---+---+---
+2 O | X |  
+Player X, enter your move (row and column): 2
+2
+  0   1   2
+0   | O |  
+ ---+---+---
+1 X | X | O
+ ---+---+---
+2 O | X | X
+Player O, enter your move (row and column): 0
+0
+  0   1   2
+0 O | O |  
+ ---+---+---
+1 X | X | O
+ ---+---+---
+2 O | X | X
+Player X, enter your move (row and column): 0
+2
+  0   1   2
+0 O | O | X
+ ---+---+---
+1 X | X | O
+ ---+---+---
+2 O | X | X
+The game is a draw!
+Do you want to play again? (y/n): n
+
+
+=== Code Execution Successful ===
